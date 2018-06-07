@@ -1,4 +1,4 @@
-package idm;
+package com.idm;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -22,42 +22,29 @@ public class DownloadTableModel  extends AbstractTableModel implements Observer 
 	public Class getColumnClass(int col) {
         return columnClasses[col];
     }
-	
-	// số lượng col của table
+
 	@Override
 	public int getColumnCount() {
-		 return columnNames.length;
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	// số lượng row của table
+
 	@Override
 	public int getRowCount() {
-        return DownloadManager.getInstance().getDownloadList().size();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
-	public Object getValueAt(int row, int col) {
-		 Downloader download = DownloadManager.getInstance().getDownloadList().get(row);
-	        
-	        switch (col) {
-	            case 0: // File name
-	                return download.getFileName();
-	            case 1: // Size
-	                return (download.getFileSize() == -1) ? "" : (FileUltil.readableFileSize(download.getFileSize()));
-	            case 2: // Progress
-	                return download.getProgress();
-	            case 3: // Transfer rate
-	                return  (download.getState() != 0) ? "" : (FileUltil.readableFileSize((long) download.getSpeed()) + "/sec");
-	            case 4: // Status
-	                return Downloader.STATUS[download.getState()];
-	        }
-	        
-	        return "";
+	public Object getValueAt(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void update(Observable ob, Object arg) {
-		int index = DownloadManager.getInstance().getDownloadList().indexOf(ob);
-        fireTableRowsUpdated(index, index);
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
 		
 	}
+	
 }
