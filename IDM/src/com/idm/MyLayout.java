@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -133,6 +134,7 @@ public class MyLayout extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Tasks - Exit");
+				taskExit(evt);
 			}
 		});
 
@@ -235,11 +237,12 @@ public class MyLayout extends JFrame {
 		jbnMainAdd.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				taskAddNewDownload(e);
+			public void actionPerformed(ActionEvent a) {
+				// Debug
+				System.out.println("Event: Tasks - Add new download");
+				taskAddNewDownload(a);
 			}
 		});
-
 		// Cancel button
 		jbnMainCancel = new JButton("Cancel");
 		jbnMainCancel.setIcon(idmCancelBtn);
@@ -279,6 +282,13 @@ public class MyLayout extends JFrame {
 		jbnMainOption.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
 		jbnMainOption.setHorizontalTextPosition(SwingConstants.CENTER);
+		jbnMainOption.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent a) {
+				// TODO Auto-generated method stub
+				downloadOption(a);
+			}
+		});
 
 		// Khai báo Download list là một JTable có Scroll
 		jspMainDownloadList = new JScrollPane();
@@ -304,6 +314,11 @@ public class MyLayout extends JFrame {
 		mainPanel.add(jspMainDownloadList, "span, width 100%, height 100%");
 		add(mainPanel);
 
+	}
+
+	// Exit
+	private void taskExit(ActionEvent evt) {
+		dispose();
 	}
 
 	private void taskAddNewDownload(ActionEvent a) {
@@ -351,24 +366,22 @@ public class MyLayout extends JFrame {
 		jDialog.setIconImage(idmIcon.getImage());
 		jDialog.setResizable(false);
 
-		// // Khai báo combobox Max Connections
-		// jlbOptionConnections = new JLabel("Max connection:");
-		// jcbOptionConnections = new JComboBox<Integer>(connectionsValue);
+		// Khai báo combobox Max Connections
+		jlbOptionConnections = new JLabel("Max connection:");
+		jcbOptionConnections = new JComboBox<Integer>(connectionsValue);
 		// jcbOptionConnections.setSelectedItem(DownloadManager.getInstance().getConnectionNumber());
 		//
-		// // Khai báo save location và button browse
-		// jlbOptionOutputFolder = new JLabel("Save location:");
-		// jtxOptionOutputFolder = new JTextField(
-		// new
-		// File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),
-		// 25);
-		// jbnOptionOutputFolderChoose = new JButton("Browse");
-		// jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent a) {
-		// downloadOptionSelectFolder(a);
-		// }
-		// });
+		// Khai báo save location và button browse
+		jlbOptionOutputFolder = new JLabel("Save location:");
+//		 jtxOptionOutputFolder = new JTextField(new File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),25);
+		jtxOptionOutputFolder = new JTextField(25);
+		jbnOptionOutputFolderChoose = new JButton("Browse");
+		jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent a) {
+				downloadOptionSelectFolder(a);
+			}
+		});
 
 		// Khai báo button Save
 		jbnOptionSave = new JButton("Save");
@@ -395,19 +408,17 @@ public class MyLayout extends JFrame {
 		jfcOptionOutputFolderChoose.setDialogTitle("Choose Save Location");
 		// DIRECTORIES_ONLY chỉ hiển thị folder thôi không có file
 		jfcOptionOutputFolderChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		// jfcOptionOutputFolderChoose.setCurrentDirectory(new
-		// File(DownloadManager.getInstance().getOutputFolder()));
 		jfcOptionOutputFolderChoose.setAcceptAllFileFilterUsed(false);
 
 		// Set temporary info for displaying
 		if (jfcOptionOutputFolderChoose.showOpenDialog(jDialog) == JFileChooser.APPROVE_OPTION) {
-			jtxOptionOutputFolder.setText(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
+			 jtxOptionOutputFolder.setText(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
 		}
 	}
 
 	private void helpAbout(ActionEvent a) {
 		// Khai báo JDialog
-		jDialog = new JDialog(this, "Help About", Dialog.ModalityType.DOCUMENT_MODAL);
+		jDialog = new JDialog(this, "About IDM", Dialog.ModalityType.DOCUMENT_MODAL);
 		jDialog.setPreferredSize(new Dimension(420, 220));
 		jDialog.setIconImage(idmIcon.getImage());
 		jDialog.setResizable(false);
@@ -421,6 +432,10 @@ public class MyLayout extends JFrame {
 				"<html><div style='text-align:center'>This program was designed and programmed by <b>GroupNine</b>.<br />"
 						+ "Software Engineering: Specialized Project - Spring 2015 - Nong Lam University.<br />"
 						+ "Instructor: <b>Prof. Pham Van Tinh PhD.</b></div></html>");
+		jlbHelpAboutVersion = new JLabel("Version 1.0");
+		jlbHelpAboutInfo = new JLabel(
+				"<html><div style='text-align:center'>This program was designed and programmed by <b>Group_KLPM</b>.<br />"
+						+ "Students of the Nong Lam University.<br /></div></html>");
 
 		// Khai báo subpanel dùng MigLayout
 		subPanel = new JPanel(new MigLayout("fill"));
