@@ -33,7 +33,7 @@ public class MyLayout extends JFrame {
 	private JPanel mainPanel;
 	private JPanel subPanel;
 	private JDialog jDialog;
-	
+
 	// Menu components
 	private JMenuBar jMenuBar;
 	private JMenu jmnTaskMenu;
@@ -67,22 +67,23 @@ public class MyLayout extends JFrame {
 	private JLabel jlbHelpAboutImg;
 	private JLabel jlbHelpAboutVersion;
 	private JLabel jlbHelpAboutInfo;
-	
-	//button các chức năng
+
+	// button các chức năng
 	private JButton jbnMainAdd;
 	private JButton jbnMainCancel;
 	private JButton jbnMainPause;
 	private JButton jbnMainRemove;
 	private JButton jbnMainResume;
 	private JButton jbnMainOption;
-	
-	//components của Download List
+
+	// components của Download List
 	private JScrollPane jspMainDownloadList;
 	private JTable jtbMainDownloadList;
-	
-	// Khai báo đối tượng DownloadTableModel gồm các thông tin "File Name", "Size", "Progress", "Transfer rate", "Status"
+
+	// Khai báo đối tượng DownloadTableModel gồm các thông tin "File Name",
+	// "Size", "Progress", "Transfer rate", "Status"
 	private DownloadTableModel tableModel;
-	
+
 	// Icons
 	private final ImageIcon idmIcon = new ImageIcon("image/dowload48x.png");
 	private final ImageIcon idmAddBtn = new ImageIcon("image/icons8-add-link-40.png");
@@ -91,7 +92,7 @@ public class MyLayout extends JFrame {
 	private final ImageIcon idmRemoveBtn = new ImageIcon("image/icons8-trash-40.png");
 	private final ImageIcon idmResumeBtn = new ImageIcon("image/icons8-resume-button-40.png");
 	private final ImageIcon idmOptionBtn = new ImageIcon("image/icons8-automatic-40.png");
-	
+
 	public MyLayout() {
 		setTitle("Internet Download Manager");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -218,7 +219,7 @@ public class MyLayout extends JFrame {
 		jMenuBar.add(jmnTaskMenu);
 		jMenuBar.add(jmnDownloadMenu);
 		jMenuBar.add(jmnHelpMenu);
-		
+
 		setJMenuBar(jMenuBar);
 
 	}
@@ -227,65 +228,72 @@ public class MyLayout extends JFrame {
 		// Add button
 		jbnMainAdd = new JButton("Add URL");
 		jbnMainAdd.setIcon(idmAddBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainAdd.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		//Cancel button
+		jbnMainAdd.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				taskAddNewDownload(e);
+			}
+		});
+
+		// Cancel button
 		jbnMainCancel = new JButton("Cancel");
 		jbnMainCancel.setIcon(idmCancelBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainCancel.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainCancel.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		//Resume button
+
+		// Resume button
 		jbnMainResume = new JButton("Resume");
 		jbnMainResume.setIcon(idmResumeBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainResume.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainResume.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		//Pause button
+
+		// Pause button
 		jbnMainPause = new JButton("Pause");
 		jbnMainPause.setIcon(idmPauseBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainPause.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainPause.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		//Remove button
+
+		// Remove button
 		jbnMainRemove = new JButton("Remove");
 		jbnMainRemove.setIcon(idmRemoveBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainRemove.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainRemove.setHorizontalTextPosition(SwingConstants.CENTER);
-		
-		//Options button
+
+		// Options button
 		jbnMainOption = new JButton("Option");
 		jbnMainOption.setIcon(idmOptionBtn);
-		//vị trí dọc của chữ trong button
+		// vị trí dọc của chữ trong button
 		jbnMainOption.setVerticalTextPosition(SwingConstants.BOTTOM);
-		//vị trí ngang của chữ trong button
+		// vị trí ngang của chữ trong button
 		jbnMainOption.setHorizontalTextPosition(SwingConstants.CENTER);
-		
+
 		// Khai báo Download list là một JTable có Scroll
 		jspMainDownloadList = new JScrollPane();
 		jtbMainDownloadList = new JTable();
-		
+
 		// Map data từ đối tượng DownloadTableModel xuống JTable
 		tableModel = new DownloadTableModel();
 		jtbMainDownloadList.setModel(tableModel);
 		jspMainDownloadList.setViewportView(jtbMainDownloadList);
-		
+
 		// Chỉnh màu cho Download List
 		jspMainDownloadList.getViewport().setBackground(new Color(255, 255, 255));
 		jtbMainDownloadList.setGridColor(new Color(240, 240, 240));
-		
-		//Khai báo main panel dùng MigLayout
+
+		// Khai báo main panel dùng MigLayout
 		mainPanel = new JPanel(new MigLayout("fill"));
 		mainPanel.add(jbnMainAdd);
 		mainPanel.add(jbnMainResume);
@@ -294,14 +302,13 @@ public class MyLayout extends JFrame {
 		mainPanel.add(jbnMainRemove);
 		mainPanel.add(jbnMainOption, "wrap");
 		mainPanel.add(jspMainDownloadList, "span, width 100%, height 100%");
-		
 		add(mainPanel);
+
 	}
 
 	private void taskAddNewDownload(ActionEvent a) {
-
 		// Khai báo JDialog
-		jDialog = new JDialog(this, "Enter new address to download",Dialog.ModalityType.DOCUMENT_MODAL);
+		jDialog = new JDialog(this, "Enter new address to download", Dialog.ModalityType.DOCUMENT_MODAL);
 		jDialog.setPreferredSize(new Dimension(600, 70));
 		jDialog.setIconImage(idmIcon.getImage());
 		jDialog.setResizable(false);
@@ -320,35 +327,48 @@ public class MyLayout extends JFrame {
 		jDialog.add(subPanel);
 
 		// set vị trí và hiển thị jDialog Add New URL
-//		jDialog.getRootPane().setDefaultButton(jbnTaskAddURL);
+		// jDialog.getRootPane().setDefaultButton(jbnTaskAddURL);
 		jDialog.pack();
 		jDialog.setLocationRelativeTo(this);
 		jDialog.setVisible(true);
+		jbnTaskAddURL.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				taskAddNewDownloadURL(e);
+			}
+		});
+	}
+	void taskAddNewDownloadURL(ActionEvent e){
+		String url = jtxTaskAddURL.getText();
+		System.out.println(url);
 	}
 
 	private void downloadOption(ActionEvent evt) {
 		// Khai báo JDialog
-		jDialog = new JDialog(this, "Internet Download Manager Options",Dialog.ModalityType.DOCUMENT_MODAL);
+		jDialog = new JDialog(this, "Internet Download Manager Options", Dialog.ModalityType.DOCUMENT_MODAL);
 		jDialog.setPreferredSize(new Dimension(400, 100));
 		jDialog.setIconImage(idmIcon.getImage());
 		jDialog.setResizable(false);
 
-//		// Khai báo combobox Max Connections
-//		jlbOptionConnections = new JLabel("Max connection:");
-//		jcbOptionConnections = new JComboBox<Integer>(connectionsValue);
-//		jcbOptionConnections.setSelectedItem(DownloadManager.getInstance().getConnectionNumber());
-//
-//		// Khai báo save location và button browse
-//		jlbOptionOutputFolder = new JLabel("Save location:");
-//		jtxOptionOutputFolder = new JTextField(
-//				new File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(), 25);
-//		jbnOptionOutputFolderChoose = new JButton("Browse");
-//		jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent a) {
-//				downloadOptionSelectFolder(a);
-//			}
-//		});
+		// // Khai báo combobox Max Connections
+		// jlbOptionConnections = new JLabel("Max connection:");
+		// jcbOptionConnections = new JComboBox<Integer>(connectionsValue);
+		// jcbOptionConnections.setSelectedItem(DownloadManager.getInstance().getConnectionNumber());
+		//
+		// // Khai báo save location và button browse
+		// jlbOptionOutputFolder = new JLabel("Save location:");
+		// jtxOptionOutputFolder = new JTextField(
+		// new
+		// File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),
+		// 25);
+		// jbnOptionOutputFolderChoose = new JButton("Browse");
+		// jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent a) {
+		// downloadOptionSelectFolder(a);
+		// }
+		// });
 
 		// Khai báo button Save
 		jbnOptionSave = new JButton("Save");
@@ -375,7 +395,8 @@ public class MyLayout extends JFrame {
 		jfcOptionOutputFolderChoose.setDialogTitle("Choose Save Location");
 		// DIRECTORIES_ONLY chỉ hiển thị folder thôi không có file
 		jfcOptionOutputFolderChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//		jfcOptionOutputFolderChoose.setCurrentDirectory(new File(DownloadManager.getInstance().getOutputFolder()));
+		// jfcOptionOutputFolderChoose.setCurrentDirectory(new
+		// File(DownloadManager.getInstance().getOutputFolder()));
 		jfcOptionOutputFolderChoose.setAcceptAllFileFilterUsed(false);
 
 		// Set temporary info for displaying
@@ -396,9 +417,10 @@ public class MyLayout extends JFrame {
 
 		// Khai báo nội dung các component trong subpanel (<br /> xuống dòng)
 		jlbHelpAboutVersion = new JLabel("Version 0.1 alpha");
-		jlbHelpAboutInfo = new JLabel("<html><div style='text-align:center'>This program was designed and programmed by <b>GroupNine</b>.<br />" +
-				"Software Engineering: Specialized Project - Spring 2015 - Nong Lam University.<br />" +
-				"Instructor: <b>Prof. Pham Van Tinh PhD.</b></div></html>");
+		jlbHelpAboutInfo = new JLabel(
+				"<html><div style='text-align:center'>This program was designed and programmed by <b>GroupNine</b>.<br />"
+						+ "Software Engineering: Specialized Project - Spring 2015 - Nong Lam University.<br />"
+						+ "Instructor: <b>Prof. Pham Van Tinh PhD.</b></div></html>");
 
 		// Khai báo subpanel dùng MigLayout
 		subPanel = new JPanel(new MigLayout("fill"));
