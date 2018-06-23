@@ -3,7 +3,7 @@ package com.idm;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+//con của class Download
 public class HttpDownload extends Download {
 
 	public HttpDownload(URL url, String outputFolder, int defaultNumOfConnections) {

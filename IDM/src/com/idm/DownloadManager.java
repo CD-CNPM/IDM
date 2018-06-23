@@ -61,8 +61,11 @@ public class DownloadManager {
 	}
 	//tạo download khi URL thỏa điều kiện
 	public Download createDownload(URL url, String outputFolder) {
+		//tạo đối tượng httpdownload(url,outputFolder,số Thread muốn tạo)
 		Download downloader = new HttpDownload(url, outputFolder, DEFAULT_NUM_OF_CONNECTIONS);
+		//add đối tượng mới vô ds
 		downloadsList.add(downloader);
+		//trả về đối tượng Downloader để giao diện lấy thông tin file
 		return downloader;
 	}
 
