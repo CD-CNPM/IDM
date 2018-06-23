@@ -8,13 +8,14 @@ import java.util.ArrayList;
 public class DownloadManager {
 	// Instance for singleton pattern
 	private static DownloadManager instance = null;
-	//use to set output fofolder for file downloaded
+	//link output folder chứa file download xuống
 	private String outputFolder = "";
-	//number of connection the thread will create
+	//số lượng Thread download đồng thời
 	private static final int DEFAULT_NUM_OF_CONNECTIONS = 5;
 	//list download
 	private ArrayList<Download> downloadsList = new ArrayList<>();
 	
+	//tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton pattern)
 	public static DownloadManager getInstance() {
 		if (instance == null)
 			instance = new DownloadManager();
@@ -58,10 +59,13 @@ public class DownloadManager {
 	public String getOutputFolder() {
 		return outputFolder;
 	}
-
+	//tạo download khi URL thỏa điều kiện
 	public Download createDownload(URL url, String outputFolder) {
-		Download downloader = new HttpDownloader(url, outputFolder, DEFAULT_NUM_OF_CONNECTIONS);
+		//tạo đối tượng httpdownload(url,outputFolder,số Thread muốn tạo)
+		Download downloader = new HttpDownload(url, outputFolder, DEFAULT_NUM_OF_CONNECTIONS);
+		//add đối tượng mới vô ds
 		downloadsList.add(downloader);
+		//trả về đối tượng Downloader để giao diện lấy thông tin file
 		return downloader;
 	}
 
