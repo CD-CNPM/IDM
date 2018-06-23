@@ -7,12 +7,16 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public abstract class Download extends Observable implements Runnable {
+	// url lấy ra đối tượng để download (lấy data từ địa chỉ web để download -
+	// mở kết nối)
 	protected URL dURL;
 	protected String dOutputFolder;
+	// số lượng Thread được tạo ra
 	protected int dConnections;
 	protected String dFileName;
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
+	protected int dDownloaded;
 
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
@@ -26,8 +30,36 @@ public abstract class Download extends Observable implements Runnable {
 		dURL = uRL;
 		this.dOutputFolder = outputFolder;
 		this.dConnections = connections;
+		// filesize = -1 là file lúc chưa khởi tạo
 		dFileSize = -1;
 		dFileName = FileUtil.getFileNameFromURL(dURL);
+	}
+	public String getdFileName() {
+		return dFileName;
+	}
+
+	public void setdFileName(String dFileName) {
+		this.dFileName = dFileName;
+	}
+
+	public long getdFileSize() {
+		return dFileSize;
+	}
+
+	public void setdFileSize(long dFileSize) {
+		this.dFileSize = dFileSize;
+	}
+
+	public DownloadState getdState() {
+		return dState;
+	}
+
+	public void setdState(DownloadState dState) {
+		this.dState = dState;
+	}
+
+	public float getProgress() {
+		return ((float) dDownloaded / dFileSize);
 	}
 
 	/** set state for the download */
@@ -78,12 +110,21 @@ public abstract class Download extends Observable implements Runnable {
 
 		} catch (IOException e) {
 			error();
-		}
-		finally {
-			if(connection != null){
+		} finally {
+			if (connection != null) {
 				connection.disconnect();
 			}
 		}
 		return isSupported;
+	}
+	/**
+	 * Get the current speed of the download
+	 */
+	public int getSpeed() {
+		int currentSpeed = 0;
+		for (DownloadThread thread : dDownloadThreadList) {
+			currentSpeed += thread.getSpeed();
+		}
+		return currentSpeed;
 	}
 }
