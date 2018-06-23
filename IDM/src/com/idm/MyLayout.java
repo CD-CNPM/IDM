@@ -394,7 +394,7 @@ public class MyLayout extends JFrame {
 		jDialog.setResizable(false);
 
 		jlbHelpAboutImg = new JLabel();
-		jlbHelpAboutImg.setIcon(new ImageIcon("img/about.png"));
+		jlbHelpAboutImg.setIcon(new ImageIcon("image/about.png"));
 
 		// Khai bÃ¡o ná»™i dung cÃ¡c component trong subpanel (<br /> xuá»‘ng dÃ²ng)
 		jlbHelpAboutVersion = new JLabel("Version 0.1 alpha");
