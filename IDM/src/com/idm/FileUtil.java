@@ -16,11 +16,13 @@ public class FileUtil {
 	 */
 	public static String getFileNameFromURL(URL url) {
 		String filename = "" ;
+		//lấy url mình nhập vào
 		String fileURL = url.getFile();
-		
 		try {
+			//lấy tên file từ sau dấu / cuối cùng trở về sau đến dấu ?
 			filename = fileURL.substring(fileURL.lastIndexOf('/') + 1, fileURL.lastIndexOf('?'));
 		} catch (Exception e) {
+			//nếu không có ? thì lấy tên file từ sau dấu / cuối cùng 
 			filename = fileURL.substring(fileURL.lastIndexOf('/') + 1);
 		}
 		return filename.replaceAll("%20", " ");
@@ -37,6 +39,7 @@ public class FileUtil {
 	 * @param size
 	 * @return String present in human readable value
 	 */
+	//chuyển size của file thành size cho người dùng đọc được
 	public static String readableFileSize(long size) {
 	    if(size <= 0) return "0 byte";
 	    if(size == 1) return "1 byte";
