@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -30,7 +29,7 @@ import javax.swing.WindowConstants;
 import com.idm.DownloadTableModel;
 import net.miginfocom.swing.MigLayout;
 
-public class MyLayout extends JFrame {
+public class MyLayout extends JFrame{
 
 	// dialog và panel
 	private JPanel mainPanel;
@@ -95,6 +94,8 @@ public class MyLayout extends JFrame {
 	private final ImageIcon idmRemoveBtn = new ImageIcon("image/icons8-trash-40.png");
 	private final ImageIcon idmResumeBtn = new ImageIcon("image/icons8-resume-button-40.png");
 	private final ImageIcon idmOptionBtn = new ImageIcon("image/icons8-automatic-40.png");
+	
+
 
 	public MyLayout() {
 		setTitle("Internet Download Manager");
@@ -317,6 +318,7 @@ public class MyLayout extends JFrame {
 
 	}
 
+	
 	// Exit
 	private void taskExit(ActionEvent evt) {
 		dispose();
@@ -366,22 +368,21 @@ public class MyLayout extends JFrame {
 			Download download = DownloadManager.getInstance().createDownload(url,
 					DownloadManager.getInstance().getOutputFolder());
 			System.out.println(download);
-			//download object return include "File Name", "Size", "Progress", "Transfer rate", "Status" for tableModel
-			
+			// download object return include "File Name", "Size", "Progress",
+			// "Transfer rate", "Status" for tableModel
+
 			// after has download object, add it to tableModel
 			// tableModel.addNewDownload(download);
-			
+
 			// reset text field addURL to empty
 			// jtxTaskAddURL.setText("");
-			
+
 			// close dialog
 			// jDialog.dispose();
 		}
 		// not support
 		else {
-			JOptionPane.showMessageDialog(this,
-					ErrorMessage.INVALID_URL, "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ErrorMessage.INVALID_URL, "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
