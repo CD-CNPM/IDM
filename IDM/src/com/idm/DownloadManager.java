@@ -18,6 +18,9 @@ public class DownloadManager {
 
 	// tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton
 	// pattern)
+	//list download
+	private ArrayList<Download> downloadsList = new ArrayList<>();
+	//tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton pattern)
 	public static DownloadManager getInstance() {
 		if (instance == null)
 			instance = new DownloadManager();

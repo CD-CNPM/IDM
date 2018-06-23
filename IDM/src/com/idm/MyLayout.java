@@ -451,6 +451,7 @@ public class MyLayout extends JFrame {
 		jDialog.setResizable(false);
 
 		jlbHelpAboutImg = new JLabel();
+		jlbHelpAboutImg.setIcon(new ImageIcon("image/about.png"));
 		jlbHelpAboutImg.setIcon(new ImageIcon("image/idm_icon.png"));
 
 		// Khai báo nội dung các component trong subpanel (<br /> xuống dòng)

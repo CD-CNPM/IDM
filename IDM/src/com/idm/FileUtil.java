@@ -6,6 +6,14 @@ import java.text.DecimalFormat;
 
 public class FileUtil {
 	//get fileName từ URL
+	/**
+	 * Get Filename from an URL
+	 * Drop queryString like '?' char right after the filename
+	 * Clean %20 string as 'space' char in filename
+	 * 
+	 * @param url
+	 * @return String filename
+	 */
 	public static String getFileNameFromURL(URL url) {
 		String filename = "" ;
 		String fileURL = url.getFile();
