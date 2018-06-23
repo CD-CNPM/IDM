@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -235,7 +237,6 @@ public class MyLayout extends JFrame {
 		// vị trí ngang của chữ trong button
 		jbnMainAdd.setHorizontalTextPosition(SwingConstants.CENTER);
 		jbnMainAdd.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent a) {
 				// Debug
@@ -332,7 +333,13 @@ public class MyLayout extends JFrame {
 		jlbTaskAddURL = new JLabel("Address:");
 		jtxTaskAddURL = new JTextField("");
 		jbnTaskAddURL = new JButton("OK");
+		jbnTaskAddURL.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				taskAddNewDownloadURL(e);
+			}
+		});
 		// Khai báo subpanel dùng MigLayout
 		subPanel = new JPanel(new MigLayout("fill"));
 		subPanel.add(jlbTaskAddURL);
@@ -346,17 +353,36 @@ public class MyLayout extends JFrame {
 		jDialog.pack();
 		jDialog.setLocationRelativeTo(this);
 		jDialog.setVisible(true);
-		jbnTaskAddURL.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				taskAddNewDownloadURL(e);
-			}
-		});
+
 	}
-	void taskAddNewDownloadURL(ActionEvent e){
-		String url = jtxTaskAddURL.getText();
-		System.out.println(url);
+
+	void taskAddNewDownloadURL(ActionEvent e) {
+		// kiểm tra url có hợp lệ không
+		URL url = DownloadManager.verifyURL(jtxTaskAddURL.getText());
+		// ok
+		if (url != null) {
+			// add download to the download list in class download manager, it's
+			// like add a url to download list url in data table
+			Download download = DownloadManager.getInstance().createDownload(url,
+					DownloadManager.getInstance().getOutputFolder());
+			System.out.println(download);
+			//download object return include "File Name", "Size", "Progress", "Transfer rate", "Status" for tableModel
+			
+			// after has download object, add it to tableModel
+			// tableModel.addNewDownload(download);
+			
+			// reset text field addURL to empty
+			// jtxTaskAddURL.setText("");
+			
+			// close dialog
+			// jDialog.dispose();
+		}
+		// not support
+		else {
+			JOptionPane.showMessageDialog(this,
+					ErrorMessage.INVALID_URL, "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void downloadOption(ActionEvent evt) {
@@ -373,7 +399,8 @@ public class MyLayout extends JFrame {
 		//
 		// Khai báo save location và button browse
 		jlbOptionOutputFolder = new JLabel("Save location:");
-//		 jtxOptionOutputFolder = new JTextField(new File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),25);
+		// jtxOptionOutputFolder = new JTextField(new
+		// File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),25);
 		jtxOptionOutputFolder = new JTextField(25);
 		jbnOptionOutputFolderChoose = new JButton("Browse");
 		jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
@@ -412,7 +439,7 @@ public class MyLayout extends JFrame {
 
 		// Set temporary info for displaying
 		if (jfcOptionOutputFolderChoose.showOpenDialog(jDialog) == JFileChooser.APPROVE_OPTION) {
-			 jtxOptionOutputFolder.setText(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
+			jtxOptionOutputFolder.setText(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
 		}
 	}
 
