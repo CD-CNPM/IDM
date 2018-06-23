@@ -1,6 +1,5 @@
 package com.idm;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ public class DownloadManager {
 	private static final int DEFAULT_NUM_OF_CONNECTIONS = 5;
 	//list download
 	private ArrayList<Download> downloadsList = new ArrayList<>();
-	
 	//tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton pattern)
 	public static DownloadManager getInstance() {
 		if (instance == null)
