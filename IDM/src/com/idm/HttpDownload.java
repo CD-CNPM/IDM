@@ -1,8 +1,9 @@
 package com.idm;
 
 import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 //con của class Download
 public class HttpDownload extends Download {
@@ -15,10 +16,10 @@ public class HttpDownload extends Download {
 	@Override
 	public void run() {
 		System.out.println("run download http loader");
-		HttpURLConnection connection = null;
+		HttpsURLConnection connection = null;
 		RandomAccessFile raf = null;
 		try {
-			connection = (HttpURLConnection) dURL.openConnection();
+			connection = (HttpsURLConnection) dURL.openConnection();
 			// nếu quá 10000 giây không kết nối được, thì nghỉ chơi luôn
 			connection.setConnectTimeout(10000);
 
