@@ -1,5 +1,6 @@
 package com.idm;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,7 +17,7 @@ public abstract class Download extends Observable implements Runnable {
 	protected String dFileName;
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
-	protected int dDownloaded;
+	protected int dDownloaded = 0;
 
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
@@ -33,6 +34,7 @@ public abstract class Download extends Observable implements Runnable {
 		// filesize = -1 là file lúc chưa khởi tạo
 		dFileSize = -1;
 		dFileName = FileUtil.getFileNameFromURL(dURL);
+		validateFile();
 	}
 	public String getdFileName() {
 		return dFileName;
@@ -127,4 +129,25 @@ public abstract class Download extends Observable implements Runnable {
 		}
 		return currentSpeed;
 	}
+	@Override
+	public String toString() {
+		return "Download [dURL=" + dURL + ", dOutputFolder=" + dOutputFolder + ", dConnections=" + dConnections
+				+ ", dFileName=" + dFileName + ", dFileSize=" + dFileSize + ", dState=" + dState + ", dDownloaded="
+				+ dDownloaded + ", dDownloadThreadList=" + dDownloadThreadList + "]";
+	}
+	/**
+	 * Increase the downloaded size
+	 */
+	protected synchronized void downloaded(long value) {
+		dDownloaded += value;
+		stateChanged();
+	}
+	protected void validateFile() {
+		File f = new File(FileUtil.joinPath(dOutputFolder, dFileName));
+		if (f.exists() && !f.isDirectory()) {
+			dFileName = "Copy of " + dFileName;
+			validateFile();
+		}
+	}
+	
 }

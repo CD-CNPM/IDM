@@ -10,7 +10,7 @@ public class DownloadManager {
 	// Instance for singleton pattern
 	private static DownloadManager instance = null;
 	// link output folder chứa file download xuống
-	private String outputFolder = "";
+	private String outputFolder = "D:\\IDM\\";
 	// số lượng Thread download đồng thời
 	private static final int DEFAULT_NUM_OF_CONNECTIONS = 5;
 	// list download
@@ -52,7 +52,6 @@ public class DownloadManager {
 			return null;
 		}
 		// kiểm tra url có request đến một file trên server không
-		System.out.println(verifiedUrl.getFile());
 		if (verifiedUrl.getFile().length() < 2)
 			return null;
 

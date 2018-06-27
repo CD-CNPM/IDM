@@ -8,11 +8,11 @@ public abstract class DownloadThread implements Runnable {
 	protected String tOutputFile;
 	protected long tStartByte;
 	protected long tEndByte;
-	private boolean tIsFinished = false;
+	protected boolean tIsFinished = false;
 	protected Thread tThread;
 	protected long tStartTime;
-	protected long tDownloaded;
-
+	protected long tDownloaded= 0;
+	protected Download download;
 	/**
 	 * Constructor
 	 * 
@@ -22,12 +22,14 @@ public abstract class DownloadThread implements Runnable {
 	 * @param startByte
 	 * @param endByte
 	 */
-	public DownloadThread(int tThreadID, URL tURL, String tOutputFile, long tStartByte, long tEndByte) {
+	public DownloadThread(int tThreadID, URL tURL, String tOutputFile, long tStartByte, long tEndByte, Download download) {
 		this.tThreadID = tThreadID;
 		this.tURL = tURL;
 		this.tOutputFile = tOutputFile;
 		this.tStartByte = tStartByte;
 		this.tEndByte = tEndByte;
+		this.download = download;
+		download();
 	}
 
 	public boolean isFinished() {
@@ -40,6 +42,7 @@ public abstract class DownloadThread implements Runnable {
 	public void download() {
 		tThread = new Thread(this);
 		tThread.start();
+		System.out.println(tThread);
 	}
 
 	public void waitFinish() throws InterruptedException {
@@ -69,5 +72,5 @@ public abstract class DownloadThread implements Runnable {
 		tStartTime = System.currentTimeMillis();
 		tDownloaded = 0;
 	}
-
+	
 }

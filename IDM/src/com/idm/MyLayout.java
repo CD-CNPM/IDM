@@ -367,7 +367,6 @@ public class MyLayout extends JFrame{
 			// like add a url to download list url in data table
 			Download download = DownloadManager.getInstance().createDownload(url,
 					DownloadManager.getInstance().getOutputFolder());
-			System.out.println(download);
 			// download object return include "File Name", "Size", "Progress",
 			// "Transfer rate", "Status" for tableModel
 
