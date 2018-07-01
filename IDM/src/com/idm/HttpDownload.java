@@ -4,8 +4,6 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
 //con của class Download
 public class HttpDownload extends Download {
 
@@ -90,8 +88,7 @@ public class HttpDownload extends Download {
 							dDownloadThreadList.add(downloadThread);
 						}
 					}
-					// If file size smaller than 400KB or not support resume,
-					// use one thread
+					// File size trên 400KB mới chia Thread để download còn nếu dưới 400KB thì chỉ chạy 1 Thread
 					else {
 						System.out.println("download use one thread");
 						HttpDownloadThread downloadThread = new HttpDownloadThread(1, dURL,
@@ -119,7 +116,7 @@ public class HttpDownload extends Download {
 				}
 				// Mark state as completed
 				if (dState == DownloadState.DOWNLOADING) {
-					setDownloadState(DownloadState.COMPLETED);
+					setdState(DownloadState.COMPLETED);
 				}
 			}
 		} catch (Exception e) {

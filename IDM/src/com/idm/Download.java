@@ -7,8 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public abstract class Download extends Observable implements Runnable {
 	// url lấy ra đối tượng để download (lấy data từ địa chỉ web để download -
 	// mở kết nối)
@@ -20,10 +18,15 @@ public abstract class Download extends Observable implements Runnable {
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
 	protected int dDownloaded = 0;
+<<<<<<< HEAD
+=======
+	protected File outputFolder;
+>>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
-	// Default constant
+	// MIN_DOWNLOAD_SIZE = 4096*100 nghĩa là file size trên 400KB mới chia
+	// Thread để download
 	protected static final int BLOCK_SIZE = 4096;
 	protected static final int BUFFER_SIZE = 4096;
 	protected static final int MIN_DOWNLOAD_SIZE = BLOCK_SIZE * 100;
@@ -39,6 +42,7 @@ public abstract class Download extends Observable implements Runnable {
 		// System debug
 		System.out.println("Filename: " + dFileName);
 	}
+	//get set FileName
 	public String getdFileName() {
 		return dFileName;
 	}
@@ -46,7 +50,7 @@ public abstract class Download extends Observable implements Runnable {
 	public void setdFileName(String dFileName) {
 		this.dFileName = dFileName;
 	}
-
+	//get set FileSize
 	public long getdFileSize() {
 		return dFileSize;
 	}
@@ -54,42 +58,75 @@ public abstract class Download extends Observable implements Runnable {
 	public void setdFileSize(long dFileSize) {
 		this.dFileSize = dFileSize;
 	}
-
-	public DownloadState getdState() {
-		return dState;
+	
+	/**
+	 * ERROR HANDLE -----------------------------------
+	 */
+	
+	protected void error() {
+		setdState(DownloadState.ERROR);
+	}
+	
+	/**
+	 * DOWNLOAD STATE HANDLE -----------------------------------
+	 */
+	
+	/**
+	 *  Pause download
+	 */
+	public void pause() {
+		setdState(DownloadState.PAUSE);
 	}
 
-	public void setdState(DownloadState dState) {
-		this.dState = dState;
+	/**
+	 * Resume download
+	 */
+	public void resume() {
+		download();
 	}
 
-	public float getProgress() {
-		return ((float) dDownloaded / dFileSize);
+	/**
+	 * Cancel download
+	 */
+	public void cancel() {
+		setdState(DownloadState.CANCELED);
 	}
-
-	/** set state for the download */
-	public void setDownloadState(DownloadState downloadState) {
-		this.dState = downloadState;
-	}
-
+	
 	/**
 	 * Start / resume download
 	 */
 	protected void download() {
-		setDownloadState(dState);
+		setdState(DownloadState.DOWNLOADING);
+		
 		Thread t = new Thread(this);
 		t.start();
 	}
+<<<<<<< HEAD
 	
 	
 	protected void error() {
 		setDownloadState(DownloadState.ERROR);
+=======
+	//get set State
+	public DownloadState getdState() {
+		return dState;
 	}
-
+	
+	public void setdState(DownloadState value) {
+		dState = value;
+		stateChanged();
+		System.out.println("State changed: " + dState);
+>>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
+	}
 	protected void stateChanged() {
 		setChanged();
 		notifyObservers();
 	}
+	//get set Progress
+	public float getProgress() {
+		return ((float) dDownloaded / dFileSize);
+	}
+
 
 	/**
 	 * Check if the server accept resume or not, because some server does not
@@ -123,6 +160,7 @@ public abstract class Download extends Observable implements Runnable {
 		}
 		return isSupported;
 	}
+
 	/**
 	 * Get the current speed of the download
 	 */
@@ -133,12 +171,14 @@ public abstract class Download extends Observable implements Runnable {
 		}
 		return currentSpeed;
 	}
+
 	@Override
 	public String toString() {
 		return "Download [dURL=" + dURL + ", dOutputFolder=" + dOutputFolder + ", dConnections=" + dConnections
 				+ ", dFileName=" + dFileName + ", dFileSize=" + dFileSize + ", dState=" + dState + ", dDownloaded="
 				+ dDownloaded + ", dDownloadThreadList=" + dDownloadThreadList + "]";
 	}
+
 	/**
 	 * Increase the downloaded size
 	 */
@@ -146,6 +186,7 @@ public abstract class Download extends Observable implements Runnable {
 		dDownloaded += value;
 		stateChanged();
 	}
+
 	protected void validateFile() {
 		File f = new File(FileUtil.joinPath(dOutputFolder, dFileName));
 		if (f.exists() && !f.isDirectory()) {
@@ -153,5 +194,5 @@ public abstract class Download extends Observable implements Runnable {
 			validateFile();
 		}
 	}
-	
+
 }

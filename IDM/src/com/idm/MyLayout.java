@@ -10,7 +10,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -119,10 +118,17 @@ public class MyLayout extends JFrame implements Observer {
 		buildMenubar();
 		buildMainWindow();
 
+		// Update lại trạng thái các nút
+		updateControlButtons();
+
+		// Hiển thị thanh tiến trình theo dạng %
+		initialize();
+
 		// set vị trí và hiển thị panel
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);// Center the window
+
 	}
 
 	private void buildMenubar() {
@@ -159,6 +165,7 @@ public class MyLayout extends JFrame implements Observer {
 		jmnTaskMenu.add(jmiTaskExitItem);
 
 		// Khai báo menu Download
+		
 		jmnDownloadMenu = new JMenu("Downloads");
 
 		// Khai báo menuitem trong menu Download
@@ -169,6 +176,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Resume");
+				downloadResume(evt);
 			}
 		});
 		// menuitem - Pause
@@ -178,6 +186,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Pause");
+				downloadPause(evt);
 			}
 		});
 		// menuitem - Cancel
@@ -187,6 +196,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Cancel");
+				downloadCancel(evt);
 			}
 		});
 		// menuitem - Remove
@@ -196,6 +206,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Remove");
+				downloadRemove(evt);
 			}
 		});
 		// menuitem - Options
@@ -257,6 +268,7 @@ public class MyLayout extends JFrame implements Observer {
 				taskAddNewDownload(a);
 			}
 		});
+		
 		// Cancel button
 		jbnMainCancel = new JButton("Cancel");
 		jbnMainCancel.setIcon(idmCancelBtn);
@@ -264,6 +276,12 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainCancel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
 		jbnMainCancel.setHorizontalTextPosition(SwingConstants.CENTER);
+		//gán sự kiện ẩn nút
+		jbnMainCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				downloadCancel(evt);
+					}
+				});
 
 		// Resume button
 		jbnMainResume = new JButton("Resume");
@@ -272,6 +290,12 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainResume.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
 		jbnMainResume.setHorizontalTextPosition(SwingConstants.CENTER);
+		//gán sự kiện ẩn nút
+		jbnMainResume.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				downloadResume(evt);
+					}
+				});
 
 		// Pause button
 		jbnMainPause = new JButton("Pause");
@@ -280,7 +304,13 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainPause.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
 		jbnMainPause.setHorizontalTextPosition(SwingConstants.CENTER);
-
+		//gán sự kiện ẩn nút
+		jbnMainPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				downloadPause(evt);
+			}
+		});
+		
 		// Remove button
 		jbnMainRemove = new JButton("Remove");
 		jbnMainRemove.setIcon(idmRemoveBtn);
@@ -288,7 +318,13 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainRemove.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
 		jbnMainRemove.setHorizontalTextPosition(SwingConstants.CENTER);
-
+		//gán sự kiện ẩn nút
+		jbnMainRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				downloadRemove(evt);
+					}
+				});
+		
 		// Options button
 		jbnMainOption = new JButton("Option");
 		jbnMainOption.setIcon(idmOptionBtn);
@@ -299,7 +335,6 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainOption.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
-				//
 				downloadOption(a);
 			}
 		});
@@ -330,6 +365,7 @@ public class MyLayout extends JFrame implements Observer {
 
 	}
 
+	// Để thanh tiến trình hiển thị %
 	private void initialize() {
 		// Set up JTable
 		jtbMainDownloadList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -348,11 +384,36 @@ public class MyLayout extends JFrame implements Observer {
 
 	}
 
-	// Exit
+	// Exit (tắt IDM)
 	private void taskExit(ActionEvent evt) {
 		dispose();
 	}
-
+	
+	//sự kiện Pause
+	private void downloadPause(ActionEvent evt) {
+		selectedDownloader.pause();
+		updateControlButtons();
+	}
+	//sự kiện Resume
+	private void downloadResume(ActionEvent evt) {
+		selectedDownloader.resume();
+		updateControlButtons();
+	}
+	//sự kiện Cancel
+	private void downloadCancel(ActionEvent evt) {
+		selectedDownloader.cancel();
+		updateControlButtons();
+	}
+	//sự kiện Remove
+	private void downloadRemove(ActionEvent evt) {
+		isClearing = true;
+		int index = jtbMainDownloadList.getSelectedRow();
+		DownloadManager.getInstance().removeDownload(index);
+		tableModel.clearDownload(index);
+		isClearing = false;
+		selectedDownloader = null;
+		updateControlButtons();
+	}
 	private void taskAddNewDownload(ActionEvent a) {
 		// Khai báo JDialog
 		jDialog = new JDialog(this, "Enter new address to download", Dialog.ModalityType.DOCUMENT_MODAL);
@@ -392,25 +453,17 @@ public class MyLayout extends JFrame implements Observer {
 		URL url = DownloadManager.verifyURL(jtxTaskAddURL.getText());
 		// ok
 		if (url != null) {
-			// add download to the download list in class download manager, it's
-			// like add a url to download list url in data table
+			// Link hợp lệ thì gọi đối tượng để tạo download
 			Download download = DownloadManager.getInstance().createDownload(url,
 					DownloadManager.getInstance().getOutputFolder());
 			System.out.println(download);
-			// download object return include "File Name", "Size", "Progress",
+			// một đối tượng download bao gồm các thông tin "File Name", "Size",
+			// "Progress",
 			// "Transfer rate", "Status" for tableModel
 			tableModel.addNewDownload(download);
 			jtxTaskAddURL.setText(""); // reset text field
 			jDialog.dispose(); // close dialog
 
-			// after has download object, add it to tableModel
-			// tableModel.addNewDownload(download);
-
-			// reset text field addURL to empty
-			// jtxTaskAddURL.setText("");
-
-			// close dialog
-			// jDialog.dispose();
 		}
 		// not support
 		else {
@@ -435,8 +488,8 @@ public class MyLayout extends JFrame implements Observer {
 		jtxOptionOutputFolder = new JTextField(
 				new File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(), 25);
 		jtxOptionOutputFolder.setEditable(false);
-		
-//		jtxOptionOutputFolder = new JTextField(25);
+
+		// jtxOptionOutputFolder = new JTextField(25);
 		jbnOptionOutputFolderChoose = new JButton("Browse");
 		jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
 			@Override
@@ -493,7 +546,8 @@ public class MyLayout extends JFrame implements Observer {
 					.setOutputFolder(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
 
 		} catch (Exception e) {
-			// Do nothing when this button hits java.lang.NullPointerException when
+			// Do nothing when this button hits java.lang.NullPointerException
+			// when
 			// jfcOptionOutputFolderChoose's path is null
 
 			// System debugs
@@ -547,7 +601,8 @@ public class MyLayout extends JFrame implements Observer {
 		if (selectedDownloader != null)
 			selectedDownloader.deleteObserver(MyLayout.this);
 
-		// If downloader is not in delete progress, register this class to be its
+		// If downloader is not in delete progress, register this class to be
+		// its
 		// observer
 		if (!isClearing) {
 			int index = jtbMainDownloadList.getSelectedRow();
@@ -562,17 +617,21 @@ public class MyLayout extends JFrame implements Observer {
 		}
 	}
 
+	// Update lại trạng thái các button khi chọn từng dòng
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+		if (selectedDownloader != null && selectedDownloader.equals(arg0))
+			updateControlButtons();
 
 	}
 
+	// Trạng thái các button
 	private void updateControlButtons() {
 		if (selectedDownloader != null) {
 			DownloadState state = selectedDownloader.getdState();
 			switch (state) {
 			case DOWNLOADING:
+				System.out.println("Downloading");
 				jbnMainResume.setEnabled(false);
 				jbnMainPause.setEnabled(true);
 				jbnMainCancel.setEnabled(true);

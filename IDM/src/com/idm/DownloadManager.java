@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import com.idm.Download;
 
 public class DownloadManager {
-	
+
 	private int connectionNumber;
 	// Instance for singleton pattern
 	private static DownloadManager instance = null;
@@ -21,22 +21,22 @@ public class DownloadManager {
 
 	// tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton
 	// pattern)
-	//list download
+	// list download
 	private ArrayList<Download> downloadsList = new ArrayList<>();
-	//tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton pattern)
-	
+	// tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton
+	// pattern)
+
 	private DownloadManager() {
 		connectionNumber = DEFAULT_NUM_OF_CONNECTIONS;
 		downloadList = new ArrayList<Download>();
 	}
-	
+
 	public static DownloadManager getInstance() {
 		if (instance == null)
 			instance = new DownloadManager();
 
 		return instance;
 	}
-
 
 	/**
 	 * Verify URL: kiểm tra hệ thống có hỗ trợ url nhập vào không
@@ -76,10 +76,11 @@ public class DownloadManager {
 	public String getOutputFolder() {
 		return outputFolder;
 	}
+
 	public Download getDownload(int index) {
 		return downloadList.get(index);
 	}
-	
+
 	/**
 	 * Get the downloader object in the list
 	 */
@@ -97,7 +98,7 @@ public class DownloadManager {
 	public void setConnectionNumber(int value) {
 		connectionNumber = value;
 	}
-	
+
 	public ArrayList<Download> getDownloadList() {
 		return downloadList;
 	}

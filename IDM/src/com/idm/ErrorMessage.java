@@ -5,5 +5,10 @@ public enum ErrorMessage {
 		public String toString() {
 			return "Invalid Download URL";
 		}
+	},
+	REMOVE_ROW {
+		public String toString() {
+			return "Please select a row to remove";
+		}
 	};
 }
