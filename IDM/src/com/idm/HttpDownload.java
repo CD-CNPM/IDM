@@ -1,6 +1,7 @@
 package com.idm;
 
 import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -16,10 +17,10 @@ public class HttpDownload extends Download {
 	@Override
 	public void run() {
 		System.out.println("run download http loader");
-		HttpsURLConnection connection = null;
+		HttpURLConnection connection = null;
 		RandomAccessFile raf = null;
 		try {
-			connection = (HttpsURLConnection) dURL.openConnection();
+			connection = (HttpURLConnection) dURL.openConnection();
 			// nếu quá 10000 giây không kết nối được, thì nghỉ chơi luôn
 			connection.setConnectTimeout(10000);
 
@@ -69,16 +70,14 @@ public class HttpDownload extends Download {
 						// Calculate start/end byte
 						long startByte = 0;
 						long endByte = partSize - 1;
-						DownloadThread downloadThread;
+						//DownloadThread downloadThread;
 
-						// DownloadThread downloadThread = new
-						// HttpDownloadThread(1, URL,
-						// FileUtil.joinPath(outputFolder, dFileName),
-						// startByte, endByte);
-						// dDownloadThreadList.add(downloadThread);
+						 DownloadThread downloadThread = new
+						 HttpDownloadThread(1, dURL,FileUtil.joinPath(dOutputFolder, dFileName),startByte, endByte, this);
+						 dDownloadThreadList.add(downloadThread);
 
 						// Add other threads
-						for (int i = 1; endByte < dFileSize; i++) {
+						for (int i = 2; endByte < dFileSize; i++) {
 							startByte = endByte + 1;
 							// The last thread is end at the end size of
 							// filesize

@@ -3,6 +3,7 @@ package com.idm;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -19,7 +20,7 @@ public class HttpDownloadThread extends DownloadThread {
 		RandomAccessFile raf = null;
 		try {
 			// open connection
-			HttpsURLConnection connection = (HttpsURLConnection) tURL.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) tURL.openConnection();
 
 			// request the range of byte to download
 			String byteRange = tStartByte + "-" + tEndByte;
