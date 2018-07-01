@@ -18,10 +18,8 @@ public abstract class Download extends Observable implements Runnable {
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
 	protected int dDownloaded = 0;
-<<<<<<< HEAD
-=======
+
 	protected File outputFolder;
->>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
@@ -101,12 +99,7 @@ public abstract class Download extends Observable implements Runnable {
 		Thread t = new Thread(this);
 		t.start();
 	}
-<<<<<<< HEAD
-	
-	
-	protected void error() {
-		setDownloadState(DownloadState.ERROR);
-=======
+
 	//get set State
 	public DownloadState getdState() {
 		return dState;
@@ -116,7 +109,6 @@ public abstract class Download extends Observable implements Runnable {
 		dState = value;
 		stateChanged();
 		System.out.println("State changed: " + dState);
->>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
 	}
 	protected void stateChanged() {
 		setChanged();
