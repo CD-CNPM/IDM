@@ -69,7 +69,6 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 	public void update(Observable o, Object arg1) {
 		int index = DownloadManager.getInstance().getDownloadList().indexOf(o);
 		fireTableRowsUpdated(index, index);
-
 	}
 
 }

@@ -625,9 +625,12 @@ public class MyLayout extends JFrame implements Observer {
 			jmiDownloadRemoveItem.setEnabled(false);
 		}
 	}
+		
 
 	public static void main(String[] args) {
 		new MyLayout();
 	}
+	
+	
 
 }

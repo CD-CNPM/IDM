@@ -44,11 +44,11 @@ public abstract class DownloadThread implements Runnable {
 		tThread.start();
 		System.out.println(tThread);
 	}
-
+    
 	public void waitFinish() throws InterruptedException {
 		tThread.join();
 	}
-
+	
 	/**
 	 * Get current speed of thread
 	 */
