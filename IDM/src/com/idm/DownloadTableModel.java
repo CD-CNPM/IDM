@@ -35,7 +35,7 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 	public int getRowCount() {
 		return DownloadManager.getInstance().getDownloadList().size();
 	}
-
+	//Lấy thông tin file để hiện lên giao diện
 	@Override
 	public Object getValueAt(int row, int col) {
 		Download download = DownloadManager.getInstance().getDownloadList().get(row);
@@ -57,17 +57,20 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 	}
 
 	public void addNewDownload(Download download) {
-
 		// Register this model to be a downloader's observer
 		download.addObserver(this);
-
 		fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
 	}
-
+	//update lại JTable sau khi xóa 1 dòng download
 	@Override
 	public void update(Observable o, Object arg1) {
 		int index = DownloadManager.getInstance().getDownloadList().indexOf(o);
+		//JTable hỗ trợ
 		fireTableRowsUpdated(index, index);
 	}
-
+	//Xóa dòng download được chọn
+	public void clearDownload(int row) {
+		//JTable hỗ trợ
+		fireTableRowsDeleted(row, row);
+	}
 }
