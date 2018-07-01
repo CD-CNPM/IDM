@@ -18,10 +18,7 @@ public abstract class Download extends Observable implements Runnable {
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
 	protected int dDownloaded = 0;
-<<<<<<< HEAD
-=======
 	protected File outputFolder;
->>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
@@ -50,6 +47,7 @@ public abstract class Download extends Observable implements Runnable {
 	public void setdFileName(String dFileName) {
 		this.dFileName = dFileName;
 	}
+	
 	//get set FileSize
 	public long getdFileSize() {
 		return dFileSize;
@@ -59,54 +57,35 @@ public abstract class Download extends Observable implements Runnable {
 		this.dFileSize = dFileSize;
 	}
 	
-	/**
-	 * ERROR HANDLE -----------------------------------
-	 */
+	//setdState Error
 	
 	protected void error() {
 		setdState(DownloadState.ERROR);
 	}
 	
-	/**
-	 * DOWNLOAD STATE HANDLE -----------------------------------
-	 */
-	
-	/**
-	 *  Pause download
-	 */
+	//setdState Pause
 	public void pause() {
 		setdState(DownloadState.PAUSE);
 	}
 
-	/**
-	 * Resume download
-	 */
+	//setdState Resume
 	public void resume() {
 		download();
 	}
 
-	/**
-	 * Cancel download
-	 */
+	//setdState Cancel
 	public void cancel() {
 		setdState(DownloadState.CANCELED);
 	}
 	
-	/**
-	 * Start / resume download
-	 */
+	//Star lại donwload sau khi resum
 	protected void download() {
 		setdState(DownloadState.DOWNLOADING);
 		
 		Thread t = new Thread(this);
 		t.start();
 	}
-<<<<<<< HEAD
 	
-	
-	protected void error() {
-		setDownloadState(DownloadState.ERROR);
-=======
 	//get set State
 	public DownloadState getdState() {
 		return dState;
@@ -116,22 +95,18 @@ public abstract class Download extends Observable implements Runnable {
 		dState = value;
 		stateChanged();
 		System.out.println("State changed: " + dState);
->>>>>>> 9530334fd59c9b4f73e6115982f2cc4dd4bb9640
 	}
 	protected void stateChanged() {
 		setChanged();
 		notifyObservers();
 	}
-	//get set Progress
+	//get set Progress = size đã down của file / tổng size của file
 	public float getProgress() {
 		return ((float) dDownloaded / dFileSize);
 	}
 
 
-	/**
-	 * Check if the server accept resume or not, because some server does not
-	 * support multi-download
-	 */
+	//check URL để lấy ra mã code xem có hỗ trợ download nhiều file không (code:210)
 	protected boolean validateServerResume() {
 		HttpURLConnection connection = null;
 		boolean isSupported = false;
@@ -161,9 +136,7 @@ public abstract class Download extends Observable implements Runnable {
 		return isSupported;
 	}
 
-	/**
-	 * Get the current speed of the download
-	 */
+	//Speed download
 	public int getSpeed() {
 		int currentSpeed = 0;
 		for (DownloadThread thread : dDownloadThreadList) {
@@ -179,14 +152,13 @@ public abstract class Download extends Observable implements Runnable {
 				+ dDownloaded + ", dDownloadThreadList=" + dDownloadThreadList + "]";
 	}
 
-	/**
-	 * Increase the downloaded size
-	 */
+	//file size đã download
 	protected synchronized void downloaded(long value) {
 		dDownloaded += value;
 		stateChanged();
 	}
-
+	
+	//kiểm tra xem file đã tồn tại chưa, nếu tồn tại rồi thì thêm chữ Copy of vào tên file sau khi lưu về máy
 	protected void validateFile() {
 		File f = new File(FileUtil.joinPath(dOutputFolder, dFileName));
 		if (f.exists() && !f.isDirectory()) {
