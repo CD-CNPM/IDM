@@ -176,6 +176,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Resume");
+				downloadResume(evt);
 			}
 		});
 		// menuitem - Pause
@@ -185,6 +186,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Pause");
+				downloadPause(evt);
 			}
 		});
 		// menuitem - Cancel
@@ -194,6 +196,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Cancel");
+				downloadCancel(evt);
 			}
 		});
 		// menuitem - Remove
@@ -203,6 +206,7 @@ public class MyLayout extends JFrame implements Observer {
 			public void actionPerformed(ActionEvent evt) {
 				// Debug
 				System.out.println("Event: Downloads - Remove");
+				downloadRemove(evt);
 			}
 		});
 		// menuitem - Options
@@ -310,13 +314,6 @@ public class MyLayout extends JFrame implements Observer {
 		// Remove button
 		jbnMainRemove = new JButton("Remove");
 		jbnMainRemove.setIcon(idmRemoveBtn);
-		jbnMainRemove.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				taskRemove();
-			}
-		});
 		// vị trí dọc của chữ trong button
 		jbnMainRemove.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
@@ -367,16 +364,6 @@ public class MyLayout extends JFrame implements Observer {
 		mainPanel.add(jspMainDownloadList, "span, width 100%, height 100%");
 		add(mainPanel);
 
-	}
-
-	protected void taskRemove() {
-		if(jtbMainDownloadList.getSelectedRow() < 0){
-			JOptionPane.showMessageDialog(this, ErrorMessage.REMOVE_ROW, "Error", JOptionPane.ERROR_MESSAGE);
-		return;
-		}
-		int row = jtbMainDownloadList.getSelectedRow();
-		DownloadManager.getInstance().removeDownload(row);
-		repaint();
 	}
 
 	// Để thanh tiến trình hiển thị %
