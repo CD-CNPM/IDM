@@ -118,11 +118,13 @@ public class MyLayout extends JFrame implements Observer {
 		// code Menu
 		buildMenubar();
 		buildMainWindow();
-
+		updateControlButtons(); // Update button and menu state
+		
 		// set vị trí và hiển thị panel
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);// Center the window
+		initialize();
 	}
 
 	private void buildMenubar() {
@@ -329,7 +331,7 @@ public class MyLayout extends JFrame implements Observer {
 		add(mainPanel);
 
 	}
-
+	//Để thanh tiến trình hiển thị %
 	private void initialize() {
 		// Set up JTable
 		jtbMainDownloadList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -392,25 +394,16 @@ public class MyLayout extends JFrame implements Observer {
 		URL url = DownloadManager.verifyURL(jtxTaskAddURL.getText());
 		// ok
 		if (url != null) {
-			// add download to the download list in class download manager, it's
-			// like add a url to download list url in data table
+			//Link hợp lệ thì gọi đối tượng để tạo download
 			Download download = DownloadManager.getInstance().createDownload(url,
 					DownloadManager.getInstance().getOutputFolder());
 			System.out.println(download);
-			// download object return include "File Name", "Size", "Progress",
+			// một đối tượng download bao gồm các thông tin "File Name", "Size", "Progress",
 			// "Transfer rate", "Status" for tableModel
 			tableModel.addNewDownload(download);
 			jtxTaskAddURL.setText(""); // reset text field
 			jDialog.dispose(); // close dialog
 
-			// after has download object, add it to tableModel
-			// tableModel.addNewDownload(download);
-
-			// reset text field addURL to empty
-			// jtxTaskAddURL.setText("");
-
-			// close dialog
-			// jDialog.dispose();
 		}
 		// not support
 		else {
@@ -573,6 +566,7 @@ public class MyLayout extends JFrame implements Observer {
 			DownloadState state = selectedDownloader.getdState();
 			switch (state) {
 			case DOWNLOADING:
+				System.out.println("Downloading");
 				jbnMainResume.setEnabled(false);
 				jbnMainPause.setEnabled(true);
 				jbnMainCancel.setEnabled(true);

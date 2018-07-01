@@ -24,7 +24,7 @@ public abstract class Download extends Observable implements Runnable {
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
-	// Default constant
+	// MIN_DOWNLOAD_SIZE = 4096*100 nghĩa là file size trên 400KB mới chia Thread để download 
 	protected static final int BLOCK_SIZE = 4096;
 	protected static final int BUFFER_SIZE = 4096;
 	protected static final int MIN_DOWNLOAD_SIZE = BLOCK_SIZE * 100;
