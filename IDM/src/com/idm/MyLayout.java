@@ -612,7 +612,6 @@ public class MyLayout extends JFrame implements Observer {
 			} else {
 				selectedDownloader = null;
 			}
-
 			updateControlButtons();
 		}
 	}
