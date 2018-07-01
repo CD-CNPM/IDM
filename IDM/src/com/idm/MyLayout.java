@@ -31,15 +31,11 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import com.idm.DownloadTableModel;
 import net.miginfocom.swing.MigLayout;
 
 public class MyLayout extends JFrame implements Observer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	// dialog và panel
 	private JPanel mainPanel;
@@ -99,6 +95,7 @@ public class MyLayout extends JFrame implements Observer {
 	// Download
 	private Download selectedDownloader;
 	private boolean isClearing;
+	
 	// Icons
 	private final ImageIcon idmIcon = new ImageIcon("image/dowload48x.png");
 	private final ImageIcon idmAddBtn = new ImageIcon("image/icons8-add-link-40.png");
@@ -596,6 +593,7 @@ public class MyLayout extends JFrame implements Observer {
 		jDialog.setVisible(true);
 	}
 
+	//Theo dõi JTable có gì thay đổi không để update lại JTable
 	private void tableChangeDownloader() {
 		// Unregister old downloader
 		if (selectedDownloader != null)
@@ -612,7 +610,6 @@ public class MyLayout extends JFrame implements Observer {
 			} else {
 				selectedDownloader = null;
 			}
-
 			updateControlButtons();
 		}
 	}
@@ -673,7 +670,7 @@ public class MyLayout extends JFrame implements Observer {
 				jmiDownloadRemoveItem.setEnabled(true);
 			}
 		} else {
-			// No download is selected in JTable
+			// Không có dòng nào trong Jtable được chọn
 			jbnMainResume.setEnabled(false);
 			jbnMainPause.setEnabled(false);
 			jbnMainCancel.setEnabled(false);
@@ -691,5 +688,4 @@ public class MyLayout extends JFrame implements Observer {
 	}
 	
 	
-
 }
