@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,17 +23,25 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.idm.DownloadTableModel;
 import net.miginfocom.swing.MigLayout;
 
-public class MyLayout extends JFrame{
+public class MyLayout extends JFrame implements Observer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// dialog và panel
 	private JPanel mainPanel;
 	private JPanel subPanel;
@@ -86,6 +97,9 @@ public class MyLayout extends JFrame{
 	// "Size", "Progress", "Transfer rate", "Status"
 	private DownloadTableModel tableModel;
 
+	// Download
+	private Download selectedDownloader;
+	private boolean isClearing;
 	// Icons
 	private final ImageIcon idmIcon = new ImageIcon("image/dowload48x.png");
 	private final ImageIcon idmAddBtn = new ImageIcon("image/icons8-add-link-40.png");
@@ -94,8 +108,6 @@ public class MyLayout extends JFrame{
 	private final ImageIcon idmRemoveBtn = new ImageIcon("image/icons8-trash-40.png");
 	private final ImageIcon idmResumeBtn = new ImageIcon("image/icons8-resume-button-40.png");
 	private final ImageIcon idmOptionBtn = new ImageIcon("image/icons8-automatic-40.png");
-	
-
 
 	public MyLayout() {
 		setTitle("Internet Download Manager");
@@ -287,7 +299,7 @@ public class MyLayout extends JFrame{
 		jbnMainOption.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
-				// TODO Auto-generated method stub
+				//
 				downloadOption(a);
 			}
 		});
@@ -318,7 +330,24 @@ public class MyLayout extends JFrame{
 
 	}
 
-	
+	private void initialize() {
+		// Set up JTable
+		jtbMainDownloadList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				tableChangeDownloader();
+			}
+		});
+
+		// Only 1 row is selected at a time
+		jtbMainDownloadList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		// Init the progress bar
+		RendererProgressBar progressBar = new RendererProgressBar(1, 100);
+		progressBar.setStringPainted(true);
+		jtbMainDownloadList.setDefaultRenderer(JProgressBar.class, progressBar);
+
+	}
+
 	// Exit
 	private void taskExit(ActionEvent evt) {
 		dispose();
@@ -370,6 +399,9 @@ public class MyLayout extends JFrame{
 			System.out.println(download);
 			// download object return include "File Name", "Size", "Progress",
 			// "Transfer rate", "Status" for tableModel
+			tableModel.addNewDownload(download);
+			jtxTaskAddURL.setText(""); // reset text field
+			jDialog.dispose(); // close dialog
 
 			// after has download object, add it to tableModel
 			// tableModel.addNewDownload(download);
@@ -396,13 +428,15 @@ public class MyLayout extends JFrame{
 		// Khai báo combobox Max Connections
 		jlbOptionConnections = new JLabel("Max connection:");
 		jcbOptionConnections = new JComboBox<Integer>(connectionsValue);
-		// jcbOptionConnections.setSelectedItem(DownloadManager.getInstance().getConnectionNumber());
+		jcbOptionConnections.setSelectedItem(DownloadManager.getInstance().getConnectionNumber());
 		//
 		// Khai báo save location và button browse
 		jlbOptionOutputFolder = new JLabel("Save location:");
-		// jtxOptionOutputFolder = new JTextField(new
-		// File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(),25);
-		jtxOptionOutputFolder = new JTextField(25);
+		jtxOptionOutputFolder = new JTextField(
+				new File(DownloadManager.getInstance().getOutputFolder()).getAbsolutePath(), 25);
+		jtxOptionOutputFolder.setEditable(false);
+		
+//		jtxOptionOutputFolder = new JTextField(25);
 		jbnOptionOutputFolderChoose = new JButton("Browse");
 		jbnOptionOutputFolderChoose.addActionListener(new ActionListener() {
 			@Override
@@ -413,6 +447,13 @@ public class MyLayout extends JFrame{
 
 		// Khai báo button Save
 		jbnOptionSave = new JButton("Save");
+		jbnOptionSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				downloadOptionSave(evt);
+				jDialog.dispose(); // close dialog
+			}
+		});
 
 		// Khai báo subpanel dùng MigLayout
 		subPanel = new JPanel(new MigLayout("fill"));
@@ -442,6 +483,27 @@ public class MyLayout extends JFrame{
 		if (jfcOptionOutputFolderChoose.showOpenDialog(jDialog) == JFileChooser.APPROVE_OPTION) {
 			jtxOptionOutputFolder.setText(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
 		}
+	}
+
+	private void downloadOptionSave(ActionEvent evt) {
+		// Save info to DownloadManager
+		try {
+			DownloadManager.getInstance().setConnectionNumber((int) jcbOptionConnections.getSelectedItem());
+			DownloadManager.getInstance()
+					.setOutputFolder(jfcOptionOutputFolderChoose.getSelectedFile().getAbsolutePath());
+
+		} catch (Exception e) {
+			// Do nothing when this button hits java.lang.NullPointerException when
+			// jfcOptionOutputFolderChoose's path is null
+
+			// System debugs
+			System.err.println("WARNING: No Folder was chosen. OutputFolder left as default");
+		}
+
+		// System logs
+		System.out.println("Saved: connections=" + DownloadManager.getInstance().getConnectionNumber()
+				+ " | outputFolder=" + DownloadManager.getInstance().getOutputFolder());
+
 	}
 
 	private void helpAbout(ActionEvent a) {
@@ -480,7 +542,92 @@ public class MyLayout extends JFrame{
 		jDialog.setVisible(true);
 	}
 
+	private void tableChangeDownloader() {
+		// Unregister old downloader
+		if (selectedDownloader != null)
+			selectedDownloader.deleteObserver(MyLayout.this);
+
+		// If downloader is not in delete progress, register this class to be its
+		// observer
+		if (!isClearing) {
+			int index = jtbMainDownloadList.getSelectedRow();
+			if (index != -1) {
+				selectedDownloader = DownloadManager.getInstance().getDownload(jtbMainDownloadList.getSelectedRow());
+				selectedDownloader.addObserver(MyLayout.this);
+			} else {
+				selectedDownloader = null;
+			}
+
+			updateControlButtons();
+		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void updateControlButtons() {
+		if (selectedDownloader != null) {
+			DownloadState state = selectedDownloader.getdState();
+			switch (state) {
+			case DOWNLOADING:
+				jbnMainResume.setEnabled(false);
+				jbnMainPause.setEnabled(true);
+				jbnMainCancel.setEnabled(true);
+				jbnMainRemove.setEnabled(false);
+				jmiDownloadResumeItem.setEnabled(false);
+				jmiDownloadPauseItem.setEnabled(true);
+				jmiDownloadCancelItem.setEnabled(true);
+				jmiDownloadRemoveItem.setEnabled(false);
+				break;
+			case PAUSE:
+				jbnMainResume.setEnabled(true);
+				jbnMainPause.setEnabled(false);
+				jbnMainCancel.setEnabled(true);
+				jbnMainRemove.setEnabled(false);
+				jmiDownloadResumeItem.setEnabled(true);
+				jmiDownloadPauseItem.setEnabled(false);
+				jmiDownloadCancelItem.setEnabled(true);
+				jmiDownloadRemoveItem.setEnabled(false);
+				break;
+			case ERROR:
+				jbnMainResume.setEnabled(true);
+				jbnMainPause.setEnabled(false);
+				jbnMainCancel.setEnabled(false);
+				jbnMainRemove.setEnabled(true);
+				jmiDownloadResumeItem.setEnabled(true);
+				jmiDownloadPauseItem.setEnabled(false);
+				jmiDownloadCancelItem.setEnabled(false);
+				jmiDownloadRemoveItem.setEnabled(true);
+				break;
+			default:
+				// CANCELLED & COMPLETED
+				jbnMainResume.setEnabled(false);
+				jbnMainPause.setEnabled(false);
+				jbnMainCancel.setEnabled(false);
+				jbnMainRemove.setEnabled(true);
+				jmiDownloadResumeItem.setEnabled(false);
+				jmiDownloadPauseItem.setEnabled(false);
+				jmiDownloadCancelItem.setEnabled(false);
+				jmiDownloadRemoveItem.setEnabled(true);
+			}
+		} else {
+			// No download is selected in JTable
+			jbnMainResume.setEnabled(false);
+			jbnMainPause.setEnabled(false);
+			jbnMainCancel.setEnabled(false);
+			jbnMainRemove.setEnabled(false);
+			jmiDownloadResumeItem.setEnabled(false);
+			jmiDownloadPauseItem.setEnabled(false);
+			jmiDownloadCancelItem.setEnabled(false);
+			jmiDownloadRemoveItem.setEnabled(false);
+		}
+	}
+
 	public static void main(String[] args) {
 		new MyLayout();
 	}
+
 }
