@@ -38,9 +38,6 @@ public class DownloadManager {
 	 * params: fileURL: url cần check
 	 */
 	public static URL verifyURL(String fileURL) {
-		// nếu không phải là chuẩn http thì báo lỗi
-		// if (!fileURL.toLowerCase().startsWith("http://"))
-		// return null;
 		URL verifiedUrl = null;
 		// nếu url hợp lệ, tạo một đối tượng URL
 		try {

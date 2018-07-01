@@ -4,8 +4,6 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
 //con của class Download
 public class HttpDownload extends Download {
 
@@ -77,7 +75,7 @@ public class HttpDownload extends Download {
 						 dDownloadThreadList.add(downloadThread);
 
 						// Add other threads
-						for (int i = 2; endByte < dFileSize; i++) {
+						for (int i = 1; i < dConnections; i++) {
 							startByte = endByte + 1;
 							// The last thread is end at the end size of
 							// filesize
