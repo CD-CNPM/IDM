@@ -92,8 +92,7 @@ public class HttpDownload extends Download {
 							dDownloadThreadList.add(downloadThread);
 						}
 					}
-					// If file size smaller than 400KB or not support resume,
-					// use one thread
+					// Nếu file nhỏ hơn 100KB thì chỉ dùng 1 Thread
 					else {
 						System.out.println("download use one thread");
 						HttpDownloadThread downloadThread = new HttpDownloadThread(1, dURL,
