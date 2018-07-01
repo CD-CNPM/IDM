@@ -2,10 +2,8 @@ package com.idm;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
-
 
 
 public class DownloadTableModel extends AbstractTableModel implements Observer {
@@ -61,6 +59,8 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
+//		int index = DownloadManager.getInstance().getDownloadList().indexOf(arg0);
+//		fireTableRowsUpdated(index, index);
 
 	}
 
