@@ -617,7 +617,7 @@ public class MyLayout extends JFrame implements Observer {
 		}
 	}
 
-	// Update lại trạng thái các button khi chọn từng dòng
+	// Update lại trạng thái  các dowload và button khi có thay đổi
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (selectedDownloader != null && selectedDownloader.equals(arg0))
