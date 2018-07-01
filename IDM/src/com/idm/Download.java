@@ -24,7 +24,8 @@ public abstract class Download extends Observable implements Runnable {
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
-	// MIN_DOWNLOAD_SIZE = 4096*100 nghĩa là file size trên 400KB mới chia Thread để download 
+	// MIN_DOWNLOAD_SIZE = 4096*100 nghĩa là file size trên 400KB mới chia
+	// Thread để download
 	protected static final int BLOCK_SIZE = 4096;
 	protected static final int BUFFER_SIZE = 4096;
 	protected static final int MIN_DOWNLOAD_SIZE = BLOCK_SIZE * 100;
@@ -40,6 +41,7 @@ public abstract class Download extends Observable implements Runnable {
 		// System debug
 		System.out.println("Filename: " + dFileName);
 	}
+	//get set FileName
 	public String getdFileName() {
 		return dFileName;
 	}
@@ -47,7 +49,7 @@ public abstract class Download extends Observable implements Runnable {
 	public void setdFileName(String dFileName) {
 		this.dFileName = dFileName;
 	}
-
+	//get set FileSize
 	public long getdFileSize() {
 		return dFileSize;
 	}
@@ -55,15 +57,64 @@ public abstract class Download extends Observable implements Runnable {
 	public void setdFileSize(long dFileSize) {
 		this.dFileSize = dFileSize;
 	}
+	
+	/**
+	 * ERROR HANDLE -----------------------------------
+	 */
+	
+	protected void error() {
+		setdState(DownloadState.ERROR);
+	}
+	
+	/**
+	 * DOWNLOAD STATE HANDLE -----------------------------------
+	 */
+	
+	/**
+	 *  Pause download
+	 */
+	public void pause() {
+		setdState(DownloadState.PAUSE);
+	}
 
+	/**
+	 * Resume download
+	 */
+	public void resume() {
+		download();
+	}
+
+	/**
+	 * Cancel download
+	 */
+	public void cancel() {
+		setdState(DownloadState.CANCELED);
+	}
+	
+	/**
+	 * Start / resume download
+	 */
+	protected void download() {
+		setdState(DownloadState.DOWNLOADING);
+		
+		Thread t = new Thread(this);
+		t.start();
+	}
+	//get set State
 	public DownloadState getdState() {
 		return dState;
 	}
-
-	public void setdState(DownloadState dState) {
-		this.dState = dState;
+	
+	public void setdState(DownloadState value) {
+		dState = value;
+		stateChanged();
+		System.out.println("State changed: " + dState);
 	}
-
+	protected void stateChanged() {
+		setChanged();
+		notifyObservers();
+	}
+	//get set Progress
 	public float getProgress() {
 		return ((float) dDownloaded / dFileSize);
 	}
@@ -73,23 +124,6 @@ public abstract class Download extends Observable implements Runnable {
 		this.dState = downloadState;
 	}
 
-	/**
-	 * Start / resume download
-	 */
-	protected void download() {
-		setDownloadState(dState);
-		Thread t = new Thread(this);
-		t.start();
-	}
-
-	protected void error() {
-		setDownloadState(DownloadState.ERROR);
-	}
-
-	protected void stateChanged() {
-		setChanged();
-		notifyObservers();
-	}
 
 	/**
 	 * Check if the server accept resume or not, because some server does not
@@ -123,6 +157,7 @@ public abstract class Download extends Observable implements Runnable {
 		}
 		return isSupported;
 	}
+
 	/**
 	 * Get the current speed of the download
 	 */
@@ -133,12 +168,14 @@ public abstract class Download extends Observable implements Runnable {
 		}
 		return currentSpeed;
 	}
+
 	@Override
 	public String toString() {
 		return "Download [dURL=" + dURL + ", dOutputFolder=" + dOutputFolder + ", dConnections=" + dConnections
 				+ ", dFileName=" + dFileName + ", dFileSize=" + dFileSize + ", dState=" + dState + ", dDownloaded="
 				+ dDownloaded + ", dDownloadThreadList=" + dDownloadThreadList + "]";
 	}
+
 	/**
 	 * Increase the downloaded size
 	 */
@@ -146,6 +183,7 @@ public abstract class Download extends Observable implements Runnable {
 		dDownloaded += value;
 		stateChanged();
 	}
+
 	protected void validateFile() {
 		File f = new File(FileUtil.joinPath(dOutputFolder, dFileName));
 		if (f.exists() && !f.isDirectory()) {
@@ -153,5 +191,5 @@ public abstract class Download extends Observable implements Runnable {
 			validateFile();
 		}
 	}
-	
+
 }
