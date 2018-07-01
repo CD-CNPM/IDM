@@ -335,7 +335,6 @@ public class MyLayout extends JFrame implements Observer {
 		jbnMainOption.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent a) {
-				//
 				downloadOption(a);
 			}
 		});
