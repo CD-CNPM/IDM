@@ -119,11 +119,6 @@ public abstract class Download extends Observable implements Runnable {
 		return ((float) dDownloaded / dFileSize);
 	}
 
-	/** set state for the download */
-	public void setDownloadState(DownloadState downloadState) {
-		this.dState = downloadState;
-	}
-
 
 	/**
 	 * Check if the server accept resume or not, because some server does not

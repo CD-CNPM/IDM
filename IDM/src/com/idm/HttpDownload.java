@@ -116,7 +116,7 @@ public class HttpDownload extends Download {
 				}
 				// Mark state as completed
 				if (dState == DownloadState.DOWNLOADING) {
-					setDownloadState(DownloadState.COMPLETED);
+					setdState(DownloadState.COMPLETED);
 				}
 			}
 		} catch (Exception e) {
