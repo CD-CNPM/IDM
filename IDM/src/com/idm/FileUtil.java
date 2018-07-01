@@ -4,15 +4,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 
 public class FileUtil {
+
 	//get fileName từ URL
-	/**
-	 * Get Filename from an URL
-	 * Drop queryString like '?' char right after the filename
-	 * Clean %20 string as 'space' char in filename
-	 * 
-	 * @param url
-	 * @return String filename
-	 */
 	public static String getFileNameFromURL(URL url) {
 		String filename = "" ;
 		//lấy url mình nhập vào
@@ -34,12 +27,6 @@ public class FileUtil {
 		return new File(folderPath, fileName).toString();
 	}
 	
-	/**
-	 * Convert file size from byte to KB, MB, GB, TB unit if possible
-	 * 
-	 * @param size
-	 * @return String present in human readable value
-	 */
 	//chuyển size của file thành size cho người dùng đọc được
 	public static String readableFileSize(long size) {
 	    if(size <= 0) return "0 byte";
