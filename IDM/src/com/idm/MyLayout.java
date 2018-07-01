@@ -369,7 +369,6 @@ public class MyLayout extends JFrame implements Observer {
 
 	}
 
-<<<<<<< HEAD
 	protected void taskRemove() {
 		if(jtbMainDownloadList.getSelectedRow() < 0){
 			JOptionPane.showMessageDialog(this, ErrorMessage.REMOVE_ROW, "Error", JOptionPane.ERROR_MESSAGE);
@@ -380,9 +379,7 @@ public class MyLayout extends JFrame implements Observer {
 		repaint();
 	}
 
-=======
 	// Để thanh tiến trình hiển thị %
->>>>>>> 8a711ee44ea3444ca603bc3bd006a8c0714a8b0e
 	private void initialize() {
 		// Set up JTable
 		jtbMainDownloadList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -480,10 +477,7 @@ public class MyLayout extends JFrame implements Observer {
 			tableModel.addNewDownload(download);
 			jtxTaskAddURL.setText(""); // reset text field
 			jDialog.dispose(); // close dialog
-<<<<<<< HEAD
-=======
 
->>>>>>> 8a711ee44ea3444ca603bc3bd006a8c0714a8b0e
 		}
 		// not support
 		else {
