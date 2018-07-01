@@ -13,15 +13,7 @@ public abstract class DownloadThread implements Runnable {
 	protected long tStartTime;
 	protected long tDownloaded= 0;
 	protected Download download;
-	/**
-	 * Constructor
-	 * 
-	 * @param threadID
-	 * @param url
-	 * @param outputFile
-	 * @param startByte
-	 * @param endByte
-	 */
+	
 	public DownloadThread(int tThreadID, URL tURL, String tOutputFile, long tStartByte, long tEndByte, Download download) {
 		this.tThreadID = tThreadID;
 		this.tURL = tURL;

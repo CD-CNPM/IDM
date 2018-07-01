@@ -593,6 +593,7 @@ public class MyLayout extends JFrame implements Observer {
 		jDialog.setVisible(true);
 	}
 
+	//Theo dõi JTable có gì thay đổi không để update lại JTable
 	private void tableChangeDownloader() {
 		// Unregister old downloader
 		if (selectedDownloader != null)
