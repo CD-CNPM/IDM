@@ -1,5 +1,4 @@
 package com.idm;
-
 import java.io.File;
 import java.net.URL;
 import java.text.DecimalFormat;
