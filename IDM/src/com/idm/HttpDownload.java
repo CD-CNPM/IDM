@@ -1,11 +1,8 @@
 package com.idm;
 
-import java.io.File;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 //con của class Download
 public class HttpDownload extends Download {

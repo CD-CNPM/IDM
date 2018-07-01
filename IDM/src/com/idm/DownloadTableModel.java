@@ -53,7 +53,6 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 		case 4: // Status
 			return download.getdState();
 		}
-
 		return "";
 	}
 
@@ -69,7 +68,6 @@ public class DownloadTableModel extends AbstractTableModel implements Observer {
 	public void update(Observable o, Object arg1) {
 		int index = DownloadManager.getInstance().getDownloadList().indexOf(o);
 		fireTableRowsUpdated(index, index);
-
 	}
 
 }

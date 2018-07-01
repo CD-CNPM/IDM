@@ -159,6 +159,7 @@ public class MyLayout extends JFrame implements Observer {
 		jmnTaskMenu.add(jmiTaskExitItem);
 
 		// Khai báo menu Download
+		
 		jmnDownloadMenu = new JMenu("Downloads");
 
 		// Khai báo menuitem trong menu Download
@@ -284,6 +285,13 @@ public class MyLayout extends JFrame implements Observer {
 		// Remove button
 		jbnMainRemove = new JButton("Remove");
 		jbnMainRemove.setIcon(idmRemoveBtn);
+		jbnMainRemove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				taskRemove();
+			}
+		});
 		// vị trí dọc của chữ trong button
 		jbnMainRemove.setVerticalTextPosition(SwingConstants.BOTTOM);
 		// vị trí ngang của chữ trong button
@@ -328,6 +336,16 @@ public class MyLayout extends JFrame implements Observer {
 		mainPanel.add(jspMainDownloadList, "span, width 100%, height 100%");
 		add(mainPanel);
 
+	}
+
+	protected void taskRemove() {
+		if(jtbMainDownloadList.getSelectedRow() < 0){
+			JOptionPane.showMessageDialog(this, ErrorMessage.REMOVE_ROW, "Error", JOptionPane.ERROR_MESSAGE);
+		return;
+		}
+		int row = jtbMainDownloadList.getSelectedRow();
+		DownloadManager.getInstance().removeDownload(row);
+		repaint();
 	}
 
 	private void initialize() {
@@ -402,15 +420,6 @@ public class MyLayout extends JFrame implements Observer {
 			tableModel.addNewDownload(download);
 			jtxTaskAddURL.setText(""); // reset text field
 			jDialog.dispose(); // close dialog
-
-			// after has download object, add it to tableModel
-			// tableModel.addNewDownload(download);
-
-			// reset text field addURL to empty
-			// jtxTaskAddURL.setText("");
-
-			// close dialog
-			// jDialog.dispose();
 		}
 		// not support
 		else {
