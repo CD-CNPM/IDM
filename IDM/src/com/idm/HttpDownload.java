@@ -1,5 +1,6 @@
 package com.idm;
 
+import java.io.File;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,7 +15,6 @@ public class HttpDownload extends Download {
 
 	@Override
 	public void run() {
-		System.out.println("run download http loader");
 		HttpURLConnection connection = null;
 		RandomAccessFile raf = null;
 		try {
@@ -47,16 +47,13 @@ public class HttpDownload extends Download {
 			}
 			// DOWNLOADING
 			if (dState == DownloadState.DOWNLOADING) {
-
 				// If download have no thread, init and download
 				if (dDownloadThreadList.size() == 0) {
-
+					
 					// create randowm access file with read/write permission
 					raf = new RandomAccessFile(FileUtil.joinPath(dOutputFolder, dFileName), "rw");
 					raf.setLength(dFileSize);
 					raf.close();
-					System.out.println(validateServerResume());
-					System.out.println(dFileSize > MIN_DOWNLOAD_SIZE);
 					if (dFileSize > MIN_DOWNLOAD_SIZE && validateServerResume()) {
 						// Calculate size for each part
 						long partSize = (long) Math.ceil((((float) dFileSize / dConnections) / BLOCK_SIZE))

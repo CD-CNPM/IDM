@@ -1,10 +1,13 @@
 package com.idm;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.net.ssl.HttpsURLConnection;
 

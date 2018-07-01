@@ -18,7 +18,7 @@ public abstract class Download extends Observable implements Runnable {
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
 	protected int dDownloaded = 0;
-
+	protected File outputFolder;
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
 
