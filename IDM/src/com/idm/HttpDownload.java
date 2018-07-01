@@ -5,6 +5,8 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 //con của class Download
 public class HttpDownload extends Download {
 
@@ -65,14 +67,13 @@ public class HttpDownload extends Download {
 						// Calculate start/end byte
 						long startByte = 0;
 						long endByte = partSize - 1;
-						//DownloadThread downloadThread;
 
-						 DownloadThread downloadThread = new
-						 HttpDownloadThread(1, dURL,FileUtil.joinPath(dOutputFolder, dFileName),startByte, endByte, this);
-						 dDownloadThreadList.add(downloadThread);
+						DownloadThread downloadThread = new HttpDownloadThread(1, dURL,
+								FileUtil.joinPath(dOutputFolder, dFileName), startByte, endByte, this);
+						dDownloadThreadList.add(downloadThread);
 
 						// Add other threads
-						for (int i = 1; i < dConnections; i++) {
+						for (int i = 2; endByte < dFileSize; i++) {
 							startByte = endByte + 1;
 							// The last thread is end at the end size of
 							// filesize
@@ -86,7 +87,8 @@ public class HttpDownload extends Download {
 							dDownloadThreadList.add(downloadThread);
 						}
 					}
-					// Nếu file nhỏ hơn 100KB thì chỉ dùng 1 Thread
+					// If file size smaller than 400KB or not support resume,
+					// use one thread
 					else {
 						System.out.println("download use one thread");
 						HttpDownloadThread downloadThread = new HttpDownloadThread(1, dURL,
@@ -107,10 +109,10 @@ public class HttpDownload extends Download {
 
 				// Waiting for all threads to complete
 				for (DownloadThread thread : dDownloadThreadList) {
-					if (!thread.isFinished()){
+					if (!thread.isFinished()) {
 						thread.waitFinish();
 					}
-						
+
 				}
 				// Mark state as completed
 				if (dState == DownloadState.DOWNLOADING) {

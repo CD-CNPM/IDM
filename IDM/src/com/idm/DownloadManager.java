@@ -1,5 +1,6 @@
 package com.idm;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -7,12 +8,14 @@ import java.util.ArrayList;
 import com.idm.Download;
 
 public class DownloadManager {
+	
+	private int connectionNumber;
 	// Instance for singleton pattern
 	private static DownloadManager instance = null;
 	// link output folder chứa file download xuống
-	private String outputFolder = "D:\\IDM\\";
+	private String outputFolder = new File("").getAbsolutePath();
 	// số lượng Thread download đồng thời
-	private static final int DEFAULT_NUM_OF_CONNECTIONS = 5;
+	private static final int DEFAULT_NUM_OF_CONNECTIONS = 8;
 	// list download
 	private ArrayList<Download> downloadList = new ArrayList<>();
 
@@ -21,6 +24,12 @@ public class DownloadManager {
 	//list download
 	private ArrayList<Download> downloadsList = new ArrayList<>();
 	//tạo cùng 1 đối tượng để get khi cần không new đối tượng mới (singleton pattern)
+	
+	private DownloadManager() {
+		connectionNumber = DEFAULT_NUM_OF_CONNECTIONS;
+		downloadList = new ArrayList<Download>();
+	}
+	
 	public static DownloadManager getInstance() {
 		if (instance == null)
 			instance = new DownloadManager();
@@ -28,16 +37,15 @@ public class DownloadManager {
 		return instance;
 	}
 
-	// get DownloadList
-	public ArrayList<Download> getDownloadList() {
-		return downloadList;
-	}
 
 	/**
 	 * Verify URL: kiểm tra hệ thống có hỗ trợ url nhập vào không
 	 * params: fileURL: url cần check
 	 */
 	public static URL verifyURL(String fileURL) {
+		// nếu không phải là chuẩn http thì báo lỗi
+		// if (!fileURL.toLowerCase().startsWith("http://"))
+		// return null;
 		URL verifiedUrl = null;
 		// nếu url hợp lệ, tạo một đối tượng URL
 		try {
@@ -68,15 +76,40 @@ public class DownloadManager {
 	public String getOutputFolder() {
 		return outputFolder;
 	}
+	public Download getDownload(int index) {
+		return downloadList.get(index);
+	}
+	
+	/**
+	 * Get the downloader object in the list
+	 */
+	public void removeDownload(int index) {
+		downloadList.remove(index);
+	}
+
+	public int getConnectionNumber() {
+		return connectionNumber;
+	}
+
+	/**
+	 * Set connection number
+	 */
+	public void setConnectionNumber(int value) {
+		connectionNumber = value;
+	}
+	
+	public ArrayList<Download> getDownloadList() {
+		return downloadList;
+	}
 
 	// tạo download khi URL thỏa điều kiện
 	public Download createDownload(URL url, String outputFolder) {
 		// tạo đối tượng httpdownload(url,outputFolder,số Thread muốn tạo)
-		Download downloader = new HttpDownload(url, outputFolder, DEFAULT_NUM_OF_CONNECTIONS);
+		Download download = new HttpDownload(url, outputFolder, DEFAULT_NUM_OF_CONNECTIONS);
 		// add đối tượng mới vô ds
-		downloadList.add(downloader);
+		downloadList.add(download);
 		// trả về đối tượng Downloader để giao diện lấy thông tin file
-		return downloader;
+		return download;
 	}
 
 }

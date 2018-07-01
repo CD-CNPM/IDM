@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public abstract class Download extends Observable implements Runnable {
 	// url lấy ra đối tượng để download (lấy data từ địa chỉ web để download -
 	// mở kết nối)
@@ -35,6 +37,8 @@ public abstract class Download extends Observable implements Runnable {
 		dFileSize = -1;
 		dFileName = FileUtil.getFileNameFromURL(dURL);
 		validateFile();
+		// System debug
+		System.out.println("Filename: " + dFileName);
 	}
 	public String getdFileName() {
 		return dFileName;
