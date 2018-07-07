@@ -18,10 +18,7 @@ public abstract class Download extends Observable implements Runnable {
 	protected long dFileSize;
 	protected DownloadState dState = DownloadState.DOWNLOADING;
 	protected int dDownloaded = 0;
-<<<<<<< HEAD
 
-=======
->>>>>>> b7884815d3d549d64ef54a45032d06b61a89b0d0
 	protected File outputFolder;
 	// state of download
 	protected ArrayList<DownloadThread> dDownloadThreadList = new ArrayList<>();
@@ -89,11 +86,7 @@ public abstract class Download extends Observable implements Runnable {
 		Thread t = new Thread(this);
 		t.start();
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> b7884815d3d549d64ef54a45032d06b61a89b0d0
 	//get set State
 	public DownloadState getdState() {
 		return dState;
