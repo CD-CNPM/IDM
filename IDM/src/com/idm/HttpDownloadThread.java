@@ -6,8 +6,6 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
-
 //con của HttpDownload
 public class HttpDownloadThread extends DownloadThread {
 	public HttpDownloadThread(int tThreadID, URL tURL, String tOutputFile, long tStartByte, long tEndByte, Download download) {

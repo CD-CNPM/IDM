@@ -448,7 +448,6 @@ public class MyLayout extends JFrame implements Observer {
 	void taskAddNewDownloadURL(ActionEvent e) {
 		// kiểm tra url có hợp lệ không
 		URL url = DownloadManager.verifyURL(jtxTaskAddURL.getText());
-		// ok
 		if (url != null) {
 			// Link hợp lệ thì gọi đối tượng để tạo download
 			Download download = DownloadManager.getInstance().createDownload(url,
